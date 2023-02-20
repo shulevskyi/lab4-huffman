@@ -51,18 +51,34 @@ public class Tree
         // second = second lowest frequency
         
         var first = dict.Last();
+
         var second = dict.ElementAt(dict.Count - 2);
         
+        // first = child node with binary number 0
+        // second = child node with binary number 1
+        
+        
+        // binaryCodes = dictionary with binary numbers for each char
+        
+        var binaryCodes = new Dictionary<string, int>();
+        
+        // Add binary numbers to the dictionary
+        
+        binaryCodes.Add(first.Key, 0);
+        binaryCodes.Add(second.Key, 1);
+
+
         // Pointer to the parent node
         var parent = first.Key + "->" + second.Key;
         
+        // Add parent node to the dictionary as an ordinary node 
         dict.Add(parent, first.Value + second.Value);
+        
+        var parentValue = dict[parent];
         
         dict.Remove(first.Key);
         dict.Remove(second.Key);
         
-        // sort the dictionary in descending order
-        //dict = dict.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         
         return dict;
     }
@@ -80,5 +96,7 @@ public class Tree
         return dict;
     }
     
+
+
 
 }

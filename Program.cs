@@ -26,6 +26,16 @@ foreach (var (key, value) in tree)
     
     // % of compression
     
-    Console.WriteLine("Compression: " + (Tree.InitialBits(text) - value) / (double) Tree.InitialBits(text) * 100 + "%");
+    //Console.WriteLine("Compression: " + (Tree.InitialBits(text) - value) / (double) Tree.InitialBits(text) * 100 + "%");
     
 }
+
+
+// Print the tree
+Console.WriteLine("Tree:");
+
+foreach (var (key, value) in tree)
+{
+    Console.WriteLine(key + ": " + value);
+}
+
