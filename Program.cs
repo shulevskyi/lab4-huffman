@@ -1,6 +1,6 @@
 ﻿using lab4_huffman;
 
-var text = "Hello"; // File.ReadAllText("../../../sherlock.txt");
+var text = "Hello my"; // File.ReadAllText("../../../sherlock.txt");
 
 var tree = new Tree(text);
 var codes = tree.GetBinaryCodes();
@@ -64,40 +64,45 @@ void BinaryCompression(string text)
             buffer = buffer.Substring(8);
         }
     }
-
-    if (buffer.Length > 0)
-    {
-        // TODO: Get rid of PadRight
-        // TODO: Restrict Tree from making codes "0"?
-        var byteString = buffer.PadRight(8, '0');
-        var b = Convert.ToByte(byteString, 2);
-        bytes.Add(b);
-    }
+    
+    // To handle the last byte
+    var bytesString = BytesToString(bytes) + buffer;
+    var diff = 8 - buffer.Length;
+    var bytesLength = (bytesString.Length / 8) + 1;
+    bytesString = bytesString.PadLeft(bytesLength * 8, '0');
+    bytesString = diff + bytesString;
 
     var initialSize = text.Length * 8;
-    var compressedSize = bytes.Count;
-    Console.WriteLine("Initial bits: " + initialSize);
-    Console.WriteLine("Compressed bits: " + compressedSize);
-    Console.WriteLine("Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
-    
-    Console.WriteLine("Compressed bytes:" + string.Join(", ", bytes.Select(x => Convert.ToString(x, 2).PadLeft(8, '0'))));
+    var compressedSize = bytesString.Length + 8;
+    Console.WriteLine("Initial bits: " + initialSize + " | Compressed bits: " + compressedSize + " | Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
+    Console.WriteLine("Compressed bytes:" + bytesString);
     
     var reverseCodes = codes.ToDictionary(x => x.Value, x => x.Key);
     var uncompressedText = "";
     buffer = "";
-    foreach (var b in bytes)
+
+    var compressedString = bytesString;
+    compressedString = compressedString.Substring(diff + 1);
+    foreach (var bit in compressedString)
     {
-        var byteString = Convert.ToString(b, 2);
-        foreach (var bit in byteString)
+        buffer += bit;
+        while (reverseCodes.ContainsKey(buffer))
         {
-            buffer += bit;
-            while (reverseCodes.ContainsKey(buffer))
-            {
-                uncompressedText += reverseCodes[buffer];
-                buffer = "";
-            }
+            uncompressedText += reverseCodes[buffer];
+            buffer = "";
         }
     }
 
     Console.WriteLine("Decompressed text: " + uncompressedText);
+}
+
+string BytesToString(List<byte> bytes)
+{
+    var sb = "";
+    foreach (var b in bytes)
+    {
+        sb += Convert.ToString(b, 2);
+    }
+
+    return sb;
 }
