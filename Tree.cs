@@ -2,57 +2,29 @@ namespace lab4_huffman;
 
 public class Tree
 {
-    
-    // Root node of the tree 
     private Node Root { get; set; }
     
     public Tree(string text)
     {
-        
-        // Creating a dictionary of chars and their frequencies
-        Dictionary<char, int> dict = new Dictionary<char, int>();
-        foreach (char c in text)
-        {
-            // Checking if the char is a letter
-            if (Char.IsLetter(c))
-            {
-                if (dict.ContainsKey(Char.ToUpper(c)))
-                {
-                    // Incrementing the value of the letter if it is already in the dictionary
-                    // Simplified version of CountFrequency
-                    dict[Char.ToUpper(c)]++;
-                }
-                else
-                {
-                    dict[Char.ToUpper(c)] = 1;
-                }
-            }
-        }
+        var nodes = GetCharFrequencies(text);
+        BuildTree(nodes);
 
-        // Creating a list of nodes
-        List<Node> nodes = new List<Node>();
-        foreach (KeyValuePair<char, int> pair in dict)
-        {
+        Root = nodes[0];
+    }
 
-            // Adding a new node to the list of nodes
-            nodes.Add(new Node
-            {
-                Symbol = pair.Key,
-                Frequency = pair.Value
-            });
-        }
-
+    private static void BuildTree(List<Node> nodes)
+    {
         while (nodes.Count > 1)
         {
             // Sort the nodes by frequency
             nodes.Sort((x, y) => x.Frequency.CompareTo(y.Frequency));
 
             // Take the two nodes with the lowest frequency
-            Node first = nodes[0];
-            Node second = nodes[1];
+            var first = nodes[0];
+            var second = nodes[1];
 
             // Create a parent node with the sum of the two frequencies
-            Node parent = new Node
+            var parent = new Node
             {
                 Frequency = first.Frequency + second.Frequency,
                 Left = first,
@@ -64,15 +36,36 @@ public class Tree
             nodes.RemoveAt(0);
             nodes.Add(parent);
         }
-
-        Root = nodes[0];
-
     }
-    
+
+    private static List<Node> GetCharFrequencies(string text)
+    {
+        // Creating a dictionary of chars and their frequencies
+        var dict = new Dictionary<char, int>();
+        foreach (var c in text.Where(char.IsLetter))
+        {
+            if (dict.ContainsKey(char.ToUpper(c)))
+            {
+                // Incrementing the value of the letter if it is already in the dictionary
+                // Simplified version of CountFrequency
+                dict[char.ToUpper(c)]++;
+            }
+            else
+            {
+                dict[char.ToUpper(c)] = 1;
+            }
+        }
+
+        // Creating a list of nodes
+        var nodes = dict.Select(pair => new Node { Symbol = pair.Key, Frequency = pair.Value }).ToList();
+        return nodes;
+    }
+
     // Get the binary codes for each letter
     public Dictionary<char, string> GetBinaryCodes() {
-        Dictionary<char, string> codes = new Dictionary<char, string>();
+        var codes = new Dictionary<char, string>();
         Traverse(Root, "", codes);
+        
         return codes;
     }
     
@@ -85,24 +78,6 @@ public class Tree
             Traverse(node.Right, code + "1", codes);
         }
     }
-    
-    // Func that returns bits of the string, with each char being 8 bits
-    public static int InitialBits(string text)
-    {
-        int initialBits = 0;
-        foreach (char c in text)
-        {
-            if (Char.IsLetter(c))
-            {
-                initialBits += 8;
-            }
-        }
-        
-        return initialBits;
-    }
-    
-    // For myself (find the function or just write it again UpdatedBits)
-    
-    
 
+    // TODO: For myself (find the function or just write it again UpdatedBits)
 }

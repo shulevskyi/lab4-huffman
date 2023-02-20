@@ -7,7 +7,7 @@ string text = File.ReadAllText("../../../sherlock.txt");
 Tree tree = new Tree(text);
 Dictionary<char, string> codes = tree.GetBinaryCodes();
 
-Console.WriteLine("Initial bits: " + Tree.InitialBits(text));
+Console.WriteLine("Initial bits: " + text.Length * 8);
 
 Console.WriteLine("Binary codes:");
 foreach (KeyValuePair<char, string> pair in codes) {
