@@ -4,25 +4,25 @@ public class Tree
 {
     
     // Count frequency of each char in text    
-    public static Dictionary<char, int> CountFrequency(string text)
+    public static Dictionary<string, int> CountFrequency(string text)
     {
-        Dictionary<char, int> dict = new Dictionary<char, int>();
+        Dictionary<string, int> dict = new Dictionary<string, int>();
         foreach (char c in text)
         {
             if (Char.IsLetter(c))
             {
-                if (dict.ContainsKey(Char.ToUpper(c)))
+                if (dict.ContainsKey(Char.ToUpper(c).ToString()))
                 {
-                    dict[Char.ToUpper(c)]++;
+                    dict[Char.ToUpper(c).ToString()]++;
                 }
                 else
                 {
-                    dict.Add(Char.ToUpper(c), 1);
+                    dict.Add(Char.ToUpper(c).ToString(), 1);
                 }
             }
         }
         
-        // sort in descending order
+        // Sort in descending order
         dict = dict.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         
         return dict;
@@ -44,5 +44,25 @@ public class Tree
         return initialBits;
     }
     
+    // Func that creates a leaf node     
+    public static Dictionary<string, int> CreateLeaf(Dictionary<string, int> dict)
+    {
+        // first = lowest frequency
+        // second = second lowest frequency
+        
+        var first = dict.Last();
+        var second = dict.ElementAt(dict.Count - 2);
+        
+        var newKey = first.Key.ToString() + second.Key.ToString();
+        var newValue = first.Value + second.Value;
+        
+        dict.Remove(first.Key);
+        dict.Remove(second.Key);
+        
+        dict.Add(newKey, newValue);
+
+        return dict;
+    }
     
+
 }
