@@ -1,0 +1,15 @@
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/bin/Debug/net7.0/lab4-huffman
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/bin/Debug/net7.0/lab4-huffman.deps.json
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/bin/Debug/net7.0/lab4-huffman.runtimeconfig.json
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/bin/Debug/net7.0/lab4-huffman.dll
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/bin/Debug/net7.0/lab4-huffman.pdb
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.csproj.AssemblyReference.cache
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.GeneratedMSBuildEditorConfig.editorconfig
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.AssemblyInfoInputs.cache
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.AssemblyInfo.cs
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.csproj.CoreCompileInputs.cache
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.dll
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/refint/lab4-huffman.dll
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.pdb
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/lab4-huffman.genruntimeconfig.cache
+/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/obj/Debug/net7.0/ref/lab4-huffman.dll
