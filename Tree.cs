@@ -92,7 +92,7 @@ public class Tree
         int initialBits = 0;
         foreach (char c in text)
         {
-            if (Char.IsLetter(c))
+            if (Char.IsLetter(c)) // Delete it, missed up 
             {
                 initialBits += 8;
             }
