@@ -6,29 +6,26 @@ string text = File.ReadAllText("/Users/danielshulevskiy/RiderProjects/lab4-huffm
 
 // Print char and its frequency in the Dictionary
 
-Dictionary<string, int> diction = Tree.CountFrequency(text);
-
-foreach (var (key, value) in Tree.CountFrequency(text))
+var frequencies = Tree.CountFrequency(text);
+Console.WriteLine("Frequencies:");
+foreach (var kvp in frequencies)
 {
-    Console.WriteLine(key + "-" + value);
+    Console.WriteLine($"{kvp.Key}: {kvp.Value}");
 }
 
 Console.WriteLine("Initial bits: " + Tree.InitialBits(text));
 
 
-// Create a leaf node
-var dict = Tree.CreateLeaf(diction);
-
-foreach (var (key, value) in dict)
-{
-    Console.WriteLine(key + "-" + value);
-}
-
-
-// CreateTree
-var tree = Tree.CreateTree(dict);
+// Create a Huffman tree
+var tree = Tree.CreateTree(frequencies);
 
 foreach (var (key, value) in tree)
 {
-    Console.WriteLine(key + "--" + value);
+    //Console.WriteLine(key + ": " + value);
+    Console.WriteLine("Compressed bits: " + value);
+    
+    // % of compression
+    
+    Console.WriteLine("Compression: " + (Tree.InitialBits(text) - value) / (double) Tree.InitialBits(text) * 100 + "%");
+    
 }
