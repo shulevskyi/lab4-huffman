@@ -44,7 +44,7 @@ public class Tree
     {
         // Creating a dictionary of chars and their frequencies
         var dict = new Dictionary<char, int>();
-        foreach (var c in text.Where(char.IsLetter))
+        foreach (var c in text.ToUpper())
         {
             if (dict.ContainsKey(char.ToUpper(c)))
             {
@@ -80,6 +80,4 @@ public class Tree
             Traverse(node.Right, code + "1", codes);
         }
     }
-
-    // TODO: For myself (find the function or just write it again UpdatedBits)
 }
