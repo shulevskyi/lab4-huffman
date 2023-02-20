@@ -21,6 +21,10 @@ public class Tree
                 }
             }
         }
+        
+        // sort in descending order
+        dict = dict.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        
         return dict;
     }
     
