@@ -67,9 +67,13 @@ void BinaryCompression(string text)
     
     // To handle the last byte
     var bytesString = BytesToString(bytes) + buffer;
-    var diff = 8 - buffer.Length;
+    var one = bytesString.Length;
+    
     var bytesLength = (bytesString.Length / 8) + 1;
+    Console.WriteLine("Bytes length: " + bytesLength);
     bytesString = bytesString.PadLeft(bytesLength * 8, '0');
+    
+    var diff = bytesLength * 8 - one;
     bytesString = diff + bytesString;
 
     var initialSize = text.Length * 8;
@@ -77,6 +81,8 @@ void BinaryCompression(string text)
     Console.WriteLine("Initial bits: " + initialSize + " | Compressed bits: " + compressedSize + " | Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
     Console.WriteLine("Compressed bytes:" + bytesString);
     
+    
+    // Decompress the text
     var reverseCodes = codes.ToDictionary(x => x.Value, x => x.Key);
     var uncompressedText = "";
     buffer = "";
