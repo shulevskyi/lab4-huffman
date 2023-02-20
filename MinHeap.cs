@@ -1,5 +1,6 @@
 namespace lab4_huffman;
 
+// @ref: https://egorikas.com/max-and-min-heap-implementation-with-csharp/
 public class MinHeap<T>
 {
     private readonly IHeapable[] _elements;
@@ -9,6 +10,8 @@ public class MinHeap<T>
     {
         _elements = new IHeapable[size];
     }
+    
+    public int Size => _size;
 
     private int GetLeftChildIndex(int elementIndex) => 2 * elementIndex + 1;
     private int GetRightChildIndex(int elementIndex) => 2 * elementIndex + 2;

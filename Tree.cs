@@ -7,21 +7,24 @@ public class Tree
     public Tree(string text)
     {
         var nodes = GetCharFrequencies(text);
-        BuildTree(nodes);
+        var minHeap = BuildTree(nodes);
 
-        Root = nodes[0];
+        Root = (Node?)minHeap.Peek();
     } 
 
-    private static void BuildTree(List<Node> nodes)
+    private MinHeap<Node> BuildTree(List<Node> nodes)
     {
-        while (nodes.Count > 1)
+        var minHeap = new MinHeap<Node>(nodes.Count);
+        foreach (var node in nodes)
         {
-            // Sort the nodes by frequency
-            nodes.Sort((x, y) => x.Frequency.CompareTo(y.Frequency));
-
+            minHeap.Add(node);
+        }
+        
+        while (minHeap.Size > 1)
+        {
             // Take the two nodes with the lowest frequency
-            var first = nodes[0];
-            var second = nodes[1];
+            var first = (Node)minHeap.Pop();
+            var second = (Node)minHeap.Pop();
 
             // Create a parent node with the sum of the two frequencies
             var parent = new Node
@@ -30,12 +33,11 @@ public class Tree
                 Left = first,
                 Right = second
             };
-
-            // Remove the two lowest nodes and add the parent node
-            nodes.RemoveAt(0);
-            nodes.RemoveAt(0);
-            nodes.Add(parent);
+            
+            minHeap.Add(parent);
         }
+
+        return minHeap;
     }
 
     private static List<Node> GetCharFrequencies(string text)
