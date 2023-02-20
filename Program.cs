@@ -23,3 +23,12 @@ foreach (var (key, value) in dict)
 {
     Console.WriteLine(key + "-" + value);
 }
+
+
+// CreateTree
+var tree = Tree.CreateTree(dict);
+
+foreach (var (key, value) in tree)
+{
+    Console.WriteLine(key + "--" + value);
+}
