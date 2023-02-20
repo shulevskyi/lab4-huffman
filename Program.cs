@@ -1,41 +1,13 @@
-﻿
-
-using lab4_huffman;
+﻿using lab4_huffman;
 
 string text = File.ReadAllText("/Users/danielshulevskiy/RiderProjects/lab4-huffman/lab4-huffman/sherlock.txt");
 
 // Print char and its frequency in the Dictionary
 
-var frequencies = Tree.CountFrequency(text);
-Console.WriteLine("Frequencies:");
-foreach (var kvp in frequencies)
-{
-    Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+Tree tree = new Tree(text);
+Dictionary<char, string> codes = tree.GetBinaryCodes();
+
+Console.WriteLine("Binary codes:");
+foreach (KeyValuePair<char, string> pair in codes) {
+    Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
 }
-
-Console.WriteLine("Initial bits: " + Tree.InitialBits(text));
-
-
-// Create a Huffman tree
-var tree = Tree.CreateTree(frequencies);
-
-foreach (var (key, value) in tree)
-{
-    //Console.WriteLine(key + ": " + value);
-    Console.WriteLine("Compressed bits: " + value);
-    
-    // % of compression
-    
-    //Console.WriteLine("Compression: " + (Tree.InitialBits(text) - value) / (double) Tree.InitialBits(text) * 100 + "%");
-    
-}
-
-
-// Print the tree
-Console.WriteLine("Tree:");
-
-foreach (var (key, value) in tree)
-{
-    Console.WriteLine(key + ": " + value);
-}
-

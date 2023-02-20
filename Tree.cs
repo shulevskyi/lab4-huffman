@@ -3,100 +3,90 @@ namespace lab4_huffman;
 public class Tree
 {
     
-    // Count frequency of each char in text    
-    public static Dictionary<string, int> CountFrequency(string text)
+    // Root node of the tree 
+    private Node Root { get; set; }
+    
+    public Tree(string text)
     {
-        Dictionary<string, int> dict = new Dictionary<string, int>();
+        
+        // Creating a dictionary of chars and their frequencies
+        Dictionary<char, int> dict = new Dictionary<char, int>();
         foreach (char c in text)
         {
+            // Checking if the char is a letter
             if (Char.IsLetter(c))
             {
-                if (dict.ContainsKey(Char.ToUpper(c).ToString()))
+                if (dict.ContainsKey(Char.ToUpper(c)))
                 {
-                    dict[Char.ToUpper(c).ToString()]++;
+                    // Incrementing the value of the letter if it is already in the dictionary
+                    // Simplified version of CountFrequency
+                    dict[Char.ToUpper(c)]++;
                 }
                 else
                 {
-                    dict.Add(Char.ToUpper(c).ToString(), 1);
+                    dict[Char.ToUpper(c)] = 1;
                 }
             }
         }
-        
-        // Sort in descending order
-        dict = dict.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-        
-        return dict;
-    }
-    
-    // Func that returns bits of the string, with each char being 8 bits
-    
-    public static int InitialBits(string text)
-    {
-        int initialBits = 0;
-        foreach (char c in text)
+
+        // Creating a list of nodes
+        List<Node> nodes = new List<Node>();
+        foreach (KeyValuePair<char, int> pair in dict)
         {
-            if (Char.IsLetter(c))
+
+            // Adding a new node to the list of nodes
+            nodes.Add(new Node
             {
-                initialBits += 8;
-            }
+                Symbol = pair.Key,
+                Frequency = pair.Value
+            });
         }
-        
-        return initialBits;
-    }
-    
-    // Func that creates a leaf node     
-    public static Dictionary<string, int> CreateLeaf(Dictionary<string, int> dict)
-    {
-        // first = lowest frequency
-        // second = second lowest frequency
-        
-        var first = dict.Last();
 
-        var second = dict.ElementAt(dict.Count - 2);
-        
-        // first = child node with binary number 0
-        // second = child node with binary number 1
-        
-        
-        // binaryCodes = dictionary with binary numbers for each char
-        
-        var binaryCodes = new Dictionary<string, int>();
-        
-        // Add binary numbers to the dictionary
-        
-        binaryCodes.Add(first.Key, 0);
-        binaryCodes.Add(second.Key, 1);
-
-
-        // Pointer to the parent node
-        var parent = first.Key + "->" + second.Key;
-        
-        // Add parent node to the dictionary as an ordinary node 
-        dict.Add(parent, first.Value + second.Value);
-        
-        var parentValue = dict[parent];
-        
-        dict.Remove(first.Key);
-        dict.Remove(second.Key);
-        
-        
-        return dict;
-    }
-    
-    // Fucntion that firsly creates a leaf node, then creates a parent node
-    
-    public static Dictionary<string, int> CreateTree(Dictionary<string, int> dict)
-    {
-        // Create a tree
-        while (dict.Count > 1)
+        while (nodes.Count > 1)
         {
-            dict = CreateLeaf(dict);
+            // Sort the nodes by frequency
+            nodes.Sort((x, y) => x.Frequency.CompareTo(y.Frequency));
+
+            // Take the two nodes with the lowest frequency
+            Node first = nodes[0];
+            Node second = nodes[1];
+
+            // Create a parent node with the sum of the two frequencies
+            Node parent = new Node
+            {
+                Frequency = first.Frequency + second.Frequency,
+                Left = first,
+                Right = second
+            };
+
+            // Remove the two lowest nodes and add the parent node
+            nodes.RemoveAt(0);
+            nodes.RemoveAt(0);
+            nodes.Add(parent);
         }
-        
-        return dict;
+
+        Root = nodes[0];
+
     }
     
-
-
+    // Get the binary codes for each letter
+    public Dictionary<char, string> GetBinaryCodes() {
+        Dictionary<char, string> codes = new Dictionary<char, string>();
+        Traverse(Root, "", codes);
+        return codes;
+    }
+    
+    // Traverse the tree and add the binary code to the dictionary
+    private void Traverse(Node node, string code, Dictionary<char, string> codes) {
+        if (node.Left == null && node.Right == null) {
+            codes[node.Symbol.Value] = code;
+        } else {
+            Traverse(node.Left, code + "0", codes);
+            Traverse(node.Right, code + "1", codes);
+        }
+    }
+    
+    // Still working on this
+    
 
 }
