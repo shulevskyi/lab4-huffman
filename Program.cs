@@ -10,3 +10,5 @@ foreach (var (key, value) in Tree.CountFrequency(text))
 {
     Console.WriteLine(key + "-" + value);
 }
+
+Console.WriteLine("Initial bits: " + Tree.InitialBits(text));

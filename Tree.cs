@@ -24,5 +24,21 @@ public class Tree
         return dict;
     }
     
+    // Func that returns bits of the string, with each char being 8 bits
+    
+    public static int InitialBits(string text)
+    {
+        int initialBits = 0;
+        foreach (char c in text)
+        {
+            if (Char.IsLetter(c))
+            {
+                initialBits += 8;
+            }
+        }
+        
+        return initialBits;
+    }
+    
     
 }
