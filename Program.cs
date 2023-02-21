@@ -1,55 +1,26 @@
 ﻿using lab4_huffman;
 
-var text = File.ReadAllText("../../../sherlock.txt");
-
-var tree = new Tree(text);
-var codes = tree.GetBinaryCodes();
-
-Console.WriteLine("Binary codes:");
-foreach (var pair in codes) {
-    Console.WriteLine($"{pair.Key}: {pair.Value}");
+void Main()
+{
+    var text = File.ReadAllText("../../../sherlock.txt");
+    var tree = new Tree(text);
+    var codes = tree.GetBinaryCodes();
+    BinaryCompression(text, codes);
 }
 
-// TODO: Add code dictionary to the compressed file 
-
-// SimpleCompression(text);
-BinaryCompression(text);
-
-void SimpleCompression(string text) {
-    // Archive the text
-    var archivedText = "";
-    foreach(var character in text.ToUpper())
-    {
-        archivedText += codes[character];
-    }
-
-    var initialSize = text.Length * 8;
-    var compressedSize = archivedText.Length * 8;
-    Console.WriteLine("Initial bits: " + initialSize);
-    Console.WriteLine("Compressed bits: " + compressedSize);
-    Console.WriteLine("Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
-
-    // Decompress the text
-    var reverseCodes 
-        = codes.ToDictionary(x 
-            => x.Value,x => x.Key);
-
-    string uncompressedText = "";
-    var buffer = "";
-    foreach(var character in archivedText.ToUpper())
-    {
-        buffer += character;
-        if (reverseCodes.ContainsKey(buffer))
-        {
-            uncompressedText += reverseCodes[buffer];
-            buffer = "";
-        }
-    }
-
-    //Console.WriteLine("Decompressed text: " + uncompressedText);
+void BinaryCompression(string text, Dictionary<char, string> codes)
+{
+    var compressedText = Compress(text, codes);
+    // Console.WriteLine("Compressed text: " + compressedText);
+    
+    var decompressedText = Decompress(compressedText, codes);
+    // Console.WriteLine("Decompressed text: " + decompressedText);
+    
+    OutputCodes(codes);
+    OutputStatistics(text, compressedText);
 }
 
-void BinaryCompression(string text)
+string Compress(string text, Dictionary<char, string> codes)
 {
     var bytes = new List<byte>();
     var buffer = "";
@@ -78,16 +49,19 @@ void BinaryCompression(string text)
     
     var initialSize = text.Length * 8;
     var compressedSize = bytesString.Length + 8;
-    Console.WriteLine("Initial bits: " + initialSize + " | Compressed bits: " + compressedSize + " | Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
+    
+    return bytesString;
+}
 
-
-    // Decompress the text
-    var reverseCodes = codes.ToDictionary(x => x.Value, x => x.Key);
+string Decompress(string compressedString, Dictionary<char, string> codes)
+{
+    var reverseCodes 
+        = codes.ToDictionary(x => x.Value, x => x.Key);
+    
     var uncompressedText = "";
-    buffer = "";
-
-    var compressedString = bytesString;
-    compressedString = compressedString.Substring(diff + 1);
+    var buffer = "";
+    
+    compressedString = compressedString.Substring(compressedString[0] + 1);
     foreach (var bit in compressedString)
     {
         buffer += bit;
@@ -98,7 +72,24 @@ void BinaryCompression(string text)
         }
     }
 
-    // Console.WriteLine("Decompressed text: " + uncompressedText);
+    return uncompressedText;
+}
+
+void OutputStatistics(string text, string compressedText)
+{
+    var initialSize = text.Length * 8;
+    var compressedSize = compressedText.Length;
+    Console.WriteLine("Initial bits: " + initialSize);
+    Console.WriteLine("Compressed bits: " + compressedSize);
+    Console.WriteLine("Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
+}
+
+void OutputCodes(Dictionary<char, string> codes)
+{
+    Console.WriteLine("Binary codes:");
+    foreach (var pair in codes) {
+        Console.WriteLine($"{pair.Key}: {pair.Value}");
+    }
 }
 
 string BytesToString(List<byte> bytes)
