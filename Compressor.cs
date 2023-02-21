@@ -1,11 +1,17 @@
+using System.Text;
+
 namespace lab4_huffman;
 
 public class Compressor
 {
+    private static readonly string KEY_VALUE_SEPARATOR = "~"; //decimal.ToByte(2);
+    private static readonly string PAIR_SEPARATOR = "|"; // decimal.ToByte(3);
+    private static readonly string CODES_SEPARATOR = "^"; // decimal.ToByte(0);
+    
     public void BinaryCompression(string text, Dictionary<char, string> codes)
     {
         var compressedText = Compress(text, codes);
-        // Console.WriteLine("Compressed text: " + compressedText);
+        Console.WriteLine("Compressed text: " + Encoding.ASCII.GetString(compressedText));
         
         var decompressedText = Decompress(compressedText);
         Console.WriteLine("Decompressed text: " + decompressedText);
@@ -14,7 +20,7 @@ public class Compressor
         OutputStatistics(text, compressedText);
     }
 
-    public string Compress(string text, Dictionary<char, string> codes)
+    public byte[] Compress(string text, Dictionary<char, string> codes)
     {
         var bytes = new List<byte>();
         var buffer = "";
@@ -43,13 +49,15 @@ public class Compressor
         
         bytesString = CodesToString(codes) + bytesString;
         
-        return bytesString;
+        return Encoding.ASCII.GetBytes(bytesString);
     }
 
-    public string Decompress(string compressedString)
+    public string Decompress(byte[] compressed)
     {
-        var codesString = compressedString.Substring(0, compressedString.IndexOf('९') + 1);
-        compressedString = compressedString.Substring(compressedString.IndexOf('९') + 1);
+        string compressedString = Encoding.ASCII.GetString(compressed);
+        
+        var codesString = compressedString.Substring(0, compressedString.IndexOf(CODES_SEPARATOR) + 1);
+        compressedString = compressedString.Substring(compressedString.IndexOf(CODES_SEPARATOR) + 1);
         var codes = StringToCodes(codesString);
         
         var reverseCodes 
@@ -79,10 +87,10 @@ public class Compressor
         {
             string key = pair.Key.ToString();
             if (key == "\n") key = @"\n";
-            sb += @$"{key}अ{pair.Value}स";
+            sb += @$"{key}{KEY_VALUE_SEPARATOR}{pair.Value}{PAIR_SEPARATOR}";
         }
         
-        sb += "९";
+        sb += CODES_SEPARATOR;
 
         return sb;
     }
@@ -90,10 +98,10 @@ public class Compressor
     static Dictionary<char, string> StringToCodes(string codesString)
     {
         var codes = new Dictionary<char, string>();
-        var pairs = codesString.Split('स');
+        var pairs = codesString.Split(PAIR_SEPARATOR);
         foreach (var pair in pairs)
         {
-            var keyValue = pair.Split("अ");
+            var keyValue = pair.Split(KEY_VALUE_SEPARATOR);
             
             char key;
             if (keyValue[0] == @"\n")
@@ -114,7 +122,7 @@ public class Compressor
         return codes;
     }
 
-    void OutputStatistics(string text, string compressedText)
+    void OutputStatistics(string text, byte[] compressedText)
     {
         var initialSize = text.Length * 8;
         var compressedSize = compressedText.Length;
