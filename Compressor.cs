@@ -4,9 +4,9 @@ namespace lab4_huffman;
 
 public class Compressor
 {
-    private static readonly string KEY_VALUE_SEPARATOR = "~"; //decimal.ToByte(2);
-    private static readonly string PAIR_SEPARATOR = "|"; // decimal.ToByte(3);
-    private static readonly string CODES_SEPARATOR = "^"; // decimal.ToByte(0);
+    private static readonly byte KEY_VALUE_SEPARATOR = decimal.ToByte(2);
+    private static readonly byte PAIR_SEPARATOR = decimal.ToByte(3);
+    private static readonly string CODES_SEPARATOR = "^";
     
     public void BinaryCompression(string text, Dictionary<char, string> codes)
     {
@@ -98,10 +98,10 @@ public class Compressor
     static Dictionary<char, string> StringToCodes(string codesString)
     {
         var codes = new Dictionary<char, string>();
-        var pairs = codesString.Split(PAIR_SEPARATOR);
+        var pairs = codesString.Split(PAIR_SEPARATOR.ToString()[0]);
         foreach (var pair in pairs)
         {
-            var keyValue = pair.Split(KEY_VALUE_SEPARATOR);
+            var keyValue = pair.Split(KEY_VALUE_SEPARATOR.ToString()[0]);
             
             char key;
             if (keyValue[0] == @"\n")
@@ -111,6 +111,7 @@ public class Compressor
             else
             {
                 if (keyValue.Length == 1) continue;
+                if (keyValue[0].Length == 0 | keyValue[0].Length > 1) continue;
                 Console.WriteLine(keyValue[0].Length
                                   + " " + keyValue[0] + " " + keyValue[1]);
                 key = Convert.ToChar(keyValue[0]);
