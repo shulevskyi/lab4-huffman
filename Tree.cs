@@ -46,15 +46,15 @@ public class Tree
         var dict = new Dictionary<char, int>();
         foreach (var c in text.ToUpper())
         {
-            if (dict.ContainsKey(char.ToUpper(c)))
+            if (dict.ContainsKey(c))
             {
                 // Incrementing the value of the letter if it is already in the dictionary
                 // Simplified version of CountFrequency
-                dict[char.ToUpper(c)]++;
+                dict[c]++;
             }
             else
             {
-                dict[char.ToUpper(c)] = 1;
+                dict[c] = 1;
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using lab4_huffman;
 
-var text = "Hello my"; // File.ReadAllText("../../../sherlock.txt");
+var text = File.ReadAllText("../../../sherlock.txt");
 
 var tree = new Tree(text);
 var codes = tree.GetBinaryCodes();
@@ -59,29 +59,28 @@ void BinaryCompression(string text)
         while (buffer.Length >= 8)
         {
             var byteString = buffer.Substring(0, 8);
+            
             var b = Convert.ToByte(byteString, 2);
             bytes.Add(b);
             buffer = buffer.Substring(8);
         }
     }
     
-    // To handle the last byte
+    // // To handle the last byte
     var bytesString = BytesToString(bytes) + buffer;
     var one = bytesString.Length;
     
     var bytesLength = (bytesString.Length / 8) + 1;
-    Console.WriteLine("Bytes length: " + bytesLength);
     bytesString = bytesString.PadLeft(bytesLength * 8, '0');
     
     var diff = bytesLength * 8 - one;
     bytesString = diff + bytesString;
-
+    
     var initialSize = text.Length * 8;
     var compressedSize = bytesString.Length + 8;
     Console.WriteLine("Initial bits: " + initialSize + " | Compressed bits: " + compressedSize + " | Compression rate: " +  (initialSize - compressedSize) * 100 / initialSize + "%");
-    Console.WriteLine("Compressed bytes:" + bytesString);
-    
-    
+
+
     // Decompress the text
     var reverseCodes = codes.ToDictionary(x => x.Value, x => x.Key);
     var uncompressedText = "";
@@ -99,7 +98,7 @@ void BinaryCompression(string text)
         }
     }
 
-    Console.WriteLine("Decompressed text: " + uncompressedText);
+    // Console.WriteLine("Decompressed text: " + uncompressedText);
 }
 
 string BytesToString(List<byte> bytes)
@@ -107,7 +106,7 @@ string BytesToString(List<byte> bytes)
     var sb = "";
     foreach (var b in bytes)
     {
-        sb += Convert.ToString(b, 2);
+        sb += Convert.ToString(b, 2).PadLeft(8, '0');
     }
 
     return sb;
